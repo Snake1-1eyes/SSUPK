@@ -1,0 +1,17 @@
+#carouselExampleIndicators {
+    width: 950px;
+    margin-left: 700px;
+}
+
+.carousel-control-prev-icon {
+    background-color: black;
+    margin-left: -120px;
+}
+
+.carousel-control-next-icon {
+    background-color: black;
+}
+
+.carousel-indicators {
+    margin-bottom: 0rem;
+}

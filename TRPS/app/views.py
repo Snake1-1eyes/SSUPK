@@ -9,6 +9,53 @@ from .vmh_manager import VmhDbManager
 # Create your views here.
 
 def index(request):
+    return render(request, "index.html")
+
+
+def sociodemographic(request):
+
+    vmh_db_manager = VmhDbManager()
+    education_stats = vmh_db_manager.get_education_stats()
+    family_stats = vmh_db_manager.get_family_history()
+    kids_stats = vmh_db_manager.get_kids_count()
+    work_stats = vmh_db_manager.get_work_relations()
+
+    fig = plt.figure(figsize=(12, 10), layout="tight")
+    fig.suptitle("Социодемографические показатели")
+
+    spec = fig.add_gridspec(2, 2)
+
+    ax_up_left = fig.add_subplot(spec[0, 0])
+    ax_up_right = fig.add_subplot(spec[0, 1])
+    ax_down_left = fig.add_subplot(spec[1, 0])
+    ax_down_right = fig.add_subplot(spec[1, 1])
+
+    ax_up_left.pie(family_stats.values(), autopct='%1.1f%%', startangle=-180)
+    ax_up_left.legend(family_stats.keys(), loc="upper right", fontsize=8)
+    ax_up_left.set_title("Семейное положение", fontsize=14, fontweight="bold", pad=10)
+
+    ax_up_right.pie(kids_stats.values(), autopct='%1.1f%%', startangle=-180)
+    ax_up_right.legend(kids_stats.keys(), loc="upper right", fontsize=8)
+    ax_up_right.set_title("Количество детей в семье", fontsize=14, fontweight="bold", pad=10)
+
+    ax_down_left.pie(education_stats.values(), autopct='%1.1f%%', startangle=-180)
+    ax_down_left.legend(education_stats.keys(), loc="upper right", fontsize=8)
+    ax_down_left.set_title("Продолжительность образования", fontsize=14, fontweight="bold", pad=10)
+
+    ax_down_right.pie(work_stats.values(), autopct='%1.1f%%', startangle=-180)
+    ax_down_right.legend(work_stats.keys(), loc="upper right", fontsize=8)
+    ax_down_right.set_title("Трудовой анамнез", fontsize=14, fontweight="bold", pad=10)
+
+    plt.subplots_adjust(top=0.92, hspace=0.5)
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png')
+    buf.seek(0)
+    string = base64.b64encode(buf.read())
+    uri = urllib.parse.quote(string)
+
+    del vmh_db_manager
+
+
     mgerm_manager = MgermManager()
     age_gender_data = mgerm_manager.get_age_gender_distribution()
     age_gender_weight_count = {
@@ -34,15 +81,13 @@ def index(request):
 
     plt.subplots_adjust(top=0.92, bottom=0.15)
     # Сохранение графика в буфер
-    buf = io.BytesIO()
-    plt.savefig(buf, format='png')
-    buf.seek(0)
-    string = base64.b64encode(buf.read())
-    uri = urllib.parse.quote(string)
+    buf1 = io.BytesIO()
+    plt.savefig(buf1, format='png')
+    buf1.seek(0)
+    string1 = base64.b64encode(buf1.read())
+    uri1 = urllib.parse.quote(string1)
 
     del mgerm_manager
-
-
 
 
     vmh_db_manager = VmhDbManager()
@@ -107,4 +152,4 @@ def index(request):
     buf2.seek(0)
     string2 = base64.b64encode(buf2.read())
     uri2 = urllib.parse.quote(string2)
-    return render(request, "index.html", {'data': uri, 'data2': uri2})
+    return render(request,  "sociodemographic.html", {'data': uri, 'data1': uri1, 'data2': uri2})
