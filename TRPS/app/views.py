@@ -5,7 +5,8 @@ from .mgerm_manager import MgermManager
 import io
 import urllib, base64
 from matplotlib.patches import ConnectionPatch
-from .vmh_manager import VmhDbManager
+# from .vmh_manager import VmhDbManager
+from .models import VmhDbManager
 # Create your views here.
 
 def index(request):
