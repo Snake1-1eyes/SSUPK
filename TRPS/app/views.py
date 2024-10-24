@@ -1,3 +1,4 @@
+from textwrap import wrap
 from django.shortcuts import render
 import matplotlib.pyplot as plt
 import numpy as np
@@ -154,3 +155,44 @@ def sociodemographic(request):
     string2 = base64.b64encode(buf2.read())
     uri2 = urllib.parse.quote(string2)
     return render(request,  "sociodemographic.html", {'data': uri, 'data1': uri1, 'data2': uri2})
+
+def general(request):
+    mgerm_manager = MgermManager()
+
+    patients_count = mgerm_manager.get_patients_count()
+    cards_count = mgerm_manager.get_cards_count()
+    incorrect_cards_count = mgerm_manager.get_incorrect_cards_count()
+    observation_time = mgerm_manager.get_observation_time()
+    # print(observation_time)
+    # print(sum(observation_time.values()))
+    # print(patients_count, cards_count, incorrect_cards_count)
+
+    common_stats_values = [patients_count, cards_count, incorrect_cards_count, cards_count - incorrect_cards_count]
+    common_stats_labels = ["Число пациентов", "Число амбулаторных карт", "Число неверно заполненных карт",
+                        "Число верно заполненных карт"]
+
+    fig, (ax_top, ax_bottom) = plt.subplots(nrows=2, figsize=(10, 8))
+
+    ax_bottom.bar(observation_time.keys(), observation_time.values(), color="green", edgecolor="black", linewidth=0.5)
+    ax_bottom.grid(axis='both', which='major', linewidth=0.5, color='grey', alpha=0.5)
+    ax_bottom.set_xlabel("Время наблюдения, лет")
+    ax_bottom.set_ylabel("Количество пациентов", labelpad=10)
+    ax_bottom.set_yscale("log")
+    ax_bottom.set_title("Длительность наблюдения в стационаре", fontsize=14, fontweight="bold", pad=20)
+
+    ax_top.bar(common_stats_labels, common_stats_values, color="indianred", edgecolor="black", linewidth=0.5)
+    ax_top.set_xticks(range(len(common_stats_labels)))
+    ax_top.set_xticklabels(['\n'.join(wrap(label, 20)) for label in common_stats_labels])
+    ax_top.grid(axis='both', which='major', linewidth=0.5, color='grey', alpha=0.5)
+    ax_top.set_ylabel("Количество пациентов", labelpad=10)
+    ax_top.set_yscale("linear")
+    ax_top.set_title("Общая статистика", fontsize=14, fontweight="bold", pad=20)
+    plt.subplots_adjust(top=0.92, hspace=0.5)
+    del mgerm_manager
+
+    buf3 = io.BytesIO()
+    plt.savefig(buf3, format='png')
+    buf3.seek(0)
+    string3 = base64.b64encode(buf3.read())
+    uri3 = urllib.parse.quote(string3)
+    return render(request,  "general.html", {'data3': uri3})
