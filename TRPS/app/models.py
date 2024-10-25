@@ -3,6 +3,22 @@ from django.db.models import Count
 from django.db import connections
 from .ml import *
 
+class StatCard(models.Model):
+    patientID = models.IntegerField()
+    hystoryNumber = models.IntegerField()
+
+    class Meta:
+        db_table = 'stat_cards_table'
+        app_label = 'mgerm'
+
+    @classmethod
+    def get_visit_counts(self):
+        visit_counts = (
+            StatCard.objects
+            .values('patientID')
+            .annotate(count=Count('hystoryNumber', distinct=True))  # Считаем уникальные обращения
+        )
+        return visit_counts
 
 class AnaVitae(models.Model):
     genetic_diseases = models.TextField(null=True, blank=True, db_column='genetic_deseases')
@@ -23,7 +39,6 @@ class DopolnitelnieStatisticheskieDannye(models.Model):
 
 class VmhDbManager:
     def get_genetic_diseases(self):
-        # Использование ORM для получения данных
         result = AnaVitae.objects.filter(genetic_diseases__isnull=False).values_list('genetic_diseases', flat=True)
         sentences = list(result)
 

@@ -147,4 +147,4 @@ STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
 
-DATABASE_ROUTERS = ['app.db_router.VmhDbRouter']
+DATABASE_ROUTERS = ['app.db_router.VmhDbRouter', 'app.db_router.MgermDbRouter']

@@ -1,3 +1,4 @@
+from collections import Counter
 from textwrap import wrap
 from django.shortcuts import render
 import matplotlib.pyplot as plt
@@ -7,7 +8,7 @@ import io
 import urllib, base64
 from matplotlib.patches import ConnectionPatch
 # from .vmh_manager import VmhDbManager
-from .models import VmhDbManager
+from .models import VmhDbManager, StatCard
 # Create your views here.
 
 def index(request):
@@ -195,4 +196,28 @@ def general(request):
     buf3.seek(0)
     string3 = base64.b64encode(buf3.read())
     uri3 = urllib.parse.quote(string3)
-    return render(request,  "general.html", {'data3': uri3})
+
+
+    visit_counts = StatCard.get_visit_counts()
+    counts = [entry['count'] for entry in visit_counts]
+    patient_count_by_count = Counter(counts)
+    plt.figure(figsize=(8, 6))
+    bars = plt.bar(patient_count_by_count.keys(), patient_count_by_count.values())
+    plt.xlabel('Количество обращений')
+    plt.ylabel('Количество пациентов')
+    plt.title('Количество пациентов по количеству обращений')
+    plt.xlim(0, 15)
+    plt.grid(True, zorder=0)
+    # Добавление значений над колонками
+    for i, bar in enumerate(bars):
+        if i < 14:
+            yval = bar.get_height()
+            plt.text(bar.get_x() + bar.get_width()/2, yval, int(yval), ha='center', va='bottom')
+
+    buf4 = io.BytesIO()
+    plt.savefig(buf4, format='png')
+    buf4.seek(0)
+    string4 = base64.b64encode(buf4.read())
+    uri4 = urllib.parse.quote(string4)
+
+    return render(request,  "general.html", {'data3': uri3, 'data4': uri4})
