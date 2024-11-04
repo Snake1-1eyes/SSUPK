@@ -7,7 +7,6 @@ from .mgerm_manager import MgermManager
 import io
 import urllib, base64
 from matplotlib.patches import ConnectionPatch
-# from .vmh_manager import VmhDbManager
 from .models import VmhDbManager, StatCard
 # Create your views here.
 
@@ -83,7 +82,6 @@ def sociodemographic(request):
     ax.set_xticklabels(age_gender_data[0].keys(), rotation=15)
 
     plt.subplots_adjust(top=0.92, bottom=0.15)
-    # Сохранение графика в буфер
     buf1 = io.BytesIO()
     plt.savefig(buf1, format='png')
     buf1.seek(0)
@@ -221,3 +219,8 @@ def general(request):
     uri4 = urllib.parse.quote(string4)
 
     return render(request,  "general.html", {'data3': uri3, 'data4': uri4})
+
+
+def stationary_outpatient(request):
+
+    return render(request,  "stationary_outpatient.html")

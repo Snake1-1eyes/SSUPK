@@ -48,7 +48,6 @@ class VmhDbManager:
 
 
     def get_education_stats(self):
-        # Использование ORM для получения данных
         result = DopolnitelnieStatisticheskieDannye.objects.filter(
             obrazovanie_dlitelnost__isnull=False
         ).values('obrazovanie_dlitelnost').annotate(
@@ -67,7 +66,6 @@ class VmhDbManager:
         return education_duration
 
     def get_family_history(self):
-        # Использование ORM для получения данных
         result = AnaVitae.objects.filter(family_hyst__isnull=False).values_list('family_hyst', flat=True)
         data = list(result)
         predictions = predict_family_relations(data)
@@ -75,7 +73,6 @@ class VmhDbManager:
         return predictions
 
     def get_kids_count(self):
-        # Использование ORM для получения данных
         result = DopolnitelnieStatisticheskieDannye.objects.filter(
             kolichestvo_detey__isnull=False,
             kolichestvo_detey__gt=0
@@ -92,7 +89,6 @@ class VmhDbManager:
         return kids_count
 
     def get_work_relations(self):
-        # Использование ORM для получения данных
         result = AnaVitae.objects.filter(working__isnull=False).values_list('working', flat=True)
         data = list(result)
 
