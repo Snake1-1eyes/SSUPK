@@ -6,6 +6,7 @@ import numpy as np
 from .mgerm_manager import MgermManager
 import io
 import urllib, base64
+from django.db.models import Count
 from matplotlib.patches import ConnectionPatch
 from .models import VmhDbManager, StatCard
 # Create your views here.
@@ -222,5 +223,53 @@ def general(request):
 
 
 def stationary_outpatient(request):
+    # График для дней (1-30 дней)
+    plt.figure(figsize=(16, 8))
+    days_data = StatCard.get_days_distribution()
+    durations = [int(d['duration_days']) for d in days_data]
+    counts = [d['count'] for d in days_data]
 
-    return render(request,  "stationary_outpatient.html")
+    bars = plt.bar(durations, counts)
+    plt.title('Распределение амбулаторных пациентов по дням')
+    plt.xlabel('Количество дней')
+    plt.ylabel('Количество пациентов')
+    plt.xlim(0, 30)
+
+    for bar in bars:
+        yval = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2, yval,
+                int(yval), ha='center', va='bottom')
+
+    # Сохранение первого графика
+    buf5 = io.BytesIO()
+    plt.savefig(buf5, format='png')
+    buf5.seek(0)
+    string5 = base64.b64encode(buf5.read())
+    uri5 = urllib.parse.quote(string5)
+    plt.close()
+
+    # График для месяцев (30-365 дней)
+    plt.figure(figsize=(16, 8))
+    months_data = StatCard.get_months_distribution()
+    durations = [int(d['duration_months']) for d in months_data]
+    counts = [d['count'] for d in months_data]
+
+    bars = plt.bar(durations, counts)
+    plt.title('Распределение амбулаторных пациентов по месяцам')
+    plt.xlabel('Месяц')
+    plt.ylabel('Количество пациентов')
+    plt.xlim(0, 11)
+
+    for bar in bars:
+        yval = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2, yval,
+                int(yval), ha='center', va='bottom')
+
+    # Сохранение второго графика
+    buf6 = io.BytesIO()
+    plt.savefig(buf6, format='png')
+    buf6.seek(0)
+    string6 = base64.b64encode(buf6.read())
+    uri6 = urllib.parse.quote(string6)
+    plt.close()
+    return render(request,  "stationary_outpatient.html", {'data5': uri5, 'data6': uri6})

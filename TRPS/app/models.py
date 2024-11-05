@@ -1,15 +1,74 @@
 from django.db import models
-from django.db.models import Count
-from django.db import connections
+from django.db.models import Count, F, ExpressionWrapper, fields
+from datetime import timedelta
 from .ml import *
 
 class StatCard(models.Model):
     patientID = models.IntegerField()
     hystoryNumber = models.IntegerField()
+    in_date = models.DateTimeField(null=True)
+    out_date = models.DateTimeField(null=True)
 
     class Meta:
         db_table = 'stat_cards_table'
         app_label = 'mgerm'
+
+    @classmethod
+    def get_duration_distribution(cls):
+        """Получение распределения длительности лечения"""
+        # Вычисляем duration как разницу между out_date и in_date в днях
+        duration_expression = ExpressionWrapper(
+            F('out_date') - F('in_date'),
+            output_field=fields.DurationField()
+        )
+        # Аннотация с вычислением длительности
+        annotated = cls.objects.annotate(
+            duration=duration_expression
+        ).exclude(duration__isnull=True)
+
+        # Преобразуем длительность в дни
+        annotated = annotated.annotate(
+            duration_days=ExpressionWrapper(
+                F('duration') / timedelta(days=1),
+                output_field=fields.FloatField()
+            )
+        )
+        return annotated
+
+    @classmethod
+    def get_days_distribution(cls):
+        """Получение распределения пациентов по дням (1-30 дней)"""
+        annotated = cls.get_duration_distribution()
+        # Фильтруем по длительности от 0 до 30 дней
+        filtered = annotated.filter(
+            duration_days__gte=0,
+            duration_days__lte=30
+        )
+        # Группируем по длительности и считаем количество пациентов
+        result = filtered.values('duration_days').annotate(
+            count=Count('patientID')
+        ).order_by('duration_days')
+        return result
+
+    @classmethod
+    def get_months_distribution(cls):
+        """Получение распределения пациентов по месяцам (30-365 дней)"""
+        annotated = cls.get_duration_distribution()
+        filtered = annotated.filter(
+            duration_days__gt=30,
+            duration_days__lt=365
+        )
+        # Преобразуем дни в месяцы
+        filtered = filtered.annotate(
+            duration_months=ExpressionWrapper(
+                F('duration_days') / 30.44,  # Среднее количество дней в месяце
+                output_field=fields.FloatField()
+            )
+        )
+        result = filtered.values('duration_months').annotate(
+            count=Count('patientID')
+        ).order_by('duration_months')
+        return result
 
     @classmethod
     def get_visit_counts(self):
