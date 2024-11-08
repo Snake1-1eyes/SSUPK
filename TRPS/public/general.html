@@ -15,33 +15,47 @@
 </head>
 
 <body class="p-3 m-0 border-0 bd-example m-0 border-0">
-    <h1 class="zagolovok">Общие статистические данные</h1>
-    <div id="carouselExampleIndicators" class="carousel slide">
-        <div class="carousel-indicators" style="margin-bottom: 0rem;">
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"
-                style="background-color: black;"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2" style="background-color: black;"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3" style="background-color: black;"></button>
-        </div>
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="data:image/png;base64,{{ data3 }}" class="d-block w-100">
+    <div class="container" style="margin-left: 10px;">
+        <div class="row align-items-start">
+            <div class="col-md-6 text-content">
+                <h1 class="zagolovok">Общие показатели</h1>
+                <div class="text">для получения информации о средней длительности наблюдения пациента в стационаре были проанализированы 46 тысяч 600 записей. Из них 39 тысяч (то
+                    есть, 83,6% от общего числа) записей содержат информацию о единичном поступлении пациента на стационарное лечение. Меньше всего, лишь 19 записей, содержат
+                    информацию о пациентах, которые наблюдались в стационаре в течение 11 лет, то есть таких пациентов считанные единицы. Как можно заметить по графику,
+                    длительность наблюдения обратно пропорциональна количеству наблюдений, из чего можно сделать вывод, что полученное распределение является экспоненциальным с
+                    параметром лямбда λ = 50. С учетом этого, математическое ожидание времени пребывания пациента в стационаре составит 1/50 года или же 7 дней.
+                </div>
             </div>
-            <div class="carousel-item">
-                <img src="data:image/png;base64,{{ data4 }}" class="d-block w-100">
+            <div class="col-md-6 carousel-container">
+                <div id="carouselExampleIndicators" class="carousel slide">
+                    <div class="carousel-indicators" style="margin-bottom: 0rem;">
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"
+                            style="background-color: black;"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2" style="background-color: black;"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3" style="background-color: black;"></button>
+                    </div>
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img src="data:image/png;base64,{{ data3 }}" class="d-block w-100">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="data:image/png;base64,{{ data4 }}" class="d-block w-100">
+                        </div>
+                        <!-- <div class="carousel-item">
+                            <img src="data:image/png;base64,{{ data2 }}" class="d-block w-100">
+                        </div> -->
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
             </div>
-            <!-- <div class="carousel-item">
-                <img src="data:image/png;base64,{{ data2 }}" class="d-block w-100">
-            </div> -->
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
     </div>
 </body>
 
