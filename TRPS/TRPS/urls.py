@@ -22,5 +22,6 @@ urlpatterns = [
     path("sociodemographic", views.sociodemographic, name='sociodemographic'),
     path("general", views.general, name='general'),
     path("stationary_outpatient", views.stationary_outpatient, name='stationary_outpatient'),
+    # path('graf3/', views.graf3, name='graf3'),
     path('admin/', admin.site.urls),
 ]

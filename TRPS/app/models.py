@@ -154,3 +154,26 @@ class VmhDbManager:
         predictions = predict_work_relations(data)
 
         return predictions
+
+
+class DepartmentIncome(models.Model):
+    department = models.CharField(max_length=255)
+    hystoryNumber = models.BigIntegerField()
+    patientID = models.BigIntegerField()
+    recordID = models.BigIntegerField()
+    date = models.DateTimeField()
+
+    class Meta:
+        db_table = 'department_income'
+        app_label = 'mgerm'
+
+class DepartmentOutcome(models.Model):
+    department = models.CharField(max_length=255)
+    hystoryNumber = models.BigIntegerField()
+    patientID = models.BigIntegerField()
+    recordID = models.BigIntegerField()
+    out_date = models.DateTimeField()
+
+    class Meta:
+        db_table = 'department_outcome'
+        app_label = 'mgerm'

@@ -4,6 +4,14 @@ body {
     background-color: #f0f0f0;
 }
 
+/* .form-control {
+    max-width: 200px;
+}
+
+.btn-primary {
+    margin-top: 1rem;
+} */
+
 .container {
     background-color: #fff;
     padding: 10px;
@@ -23,7 +31,6 @@ body {
 
 #carouselExampleIndicators {
     width: 950px;
-    margin-left: 70px;
 }
 
 .carousel-control-prev-icon {
@@ -33,6 +40,7 @@ body {
 
 .carousel-control-next-icon {
     background-color: black;
+    margin-right: -120px;
 }
 
 .carousel-indicators {
