@@ -24,7 +24,6 @@ def sociodemographic(request):
     work_stats = vmh_db_manager.get_work_relations()
 
     fig = plt.figure(figsize=(12, 10), layout="tight")
-    fig.suptitle("Социодемографические показатели")
 
     spec = fig.add_gridspec(2, 2)
 
@@ -163,9 +162,6 @@ def general(request):
     cards_count = mgerm_manager.get_cards_count()
     incorrect_cards_count = mgerm_manager.get_incorrect_cards_count()
     observation_time = mgerm_manager.get_observation_time()
-    # print(observation_time)
-    # print(sum(observation_time.values()))
-    # print(patients_count, cards_count, incorrect_cards_count)
 
     common_stats_values = [patients_count, cards_count, incorrect_cards_count, cards_count - incorrect_cards_count]
     common_stats_labels = ["Число пациентов", "Число амбулаторных карт", "Число неверно заполненных карт",
