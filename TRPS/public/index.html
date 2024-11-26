@@ -8,10 +8,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Пример страницы</title>
     <link href="{% static '/css/bootstrap.css' %}" rel="stylesheet">
-    <link rel="stylesheet" href="{% static '/css/style.css' %}">
+    <link rel="stylesheet" href="{% static '/css/index.css' %}">
 </head>
 
 <body>
+    <h1 style="text-align: center; margin-top: 200px; margin-bottom: 80px;">
+        Система статистического учёта пациентов клиники НПЦ им. Соловьева
+    </h1>
+
+    <p style="text-align: center; margin-bottom: 80px; padding: 0 200px; font-size: 24px; line-height: 1.5;">
+        Добро пожаловать в систему статистического учёта пациентов. Данная система предоставляет
+        возможность просмотра различных статистических показателей в удобном графическом представлении.
+        Выберите интересующий вас раздел, нажав на соответствующую кнопку ниже:
+    </p>
     <div class="container">
         <a href="{% url 'sociodemographic' %}"><button type="submit" class="btn btn-outline-primary">Социодемографические показатели</button></a>
         <a href="{% url 'general' %}"><button type="submit" class="btn btn-outline-primary">Общие статистические данные</button></a>
